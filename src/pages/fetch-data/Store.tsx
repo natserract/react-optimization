@@ -8,7 +8,7 @@ type CachedData = {
   [u: string]: any
 }
 
-const CachedDataCtx = createContext<Context<CachedData> | undefined>(undefined)
+const CachedDataCtx = createContext<Context<CachedData>>({})
 
 export function useCachedData<T>() {
   return useContext(CachedDataCtx) as [T[], Dispatch]
