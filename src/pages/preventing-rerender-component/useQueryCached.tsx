@@ -1,8 +1,8 @@
 import { useEffect } from 'react'
-import { useCachedDataCtx } from './Store'
+import { useCachedData } from './Store'
 
-export function useCachedFetch(url: string) {
-  const [data, setCachedData] = useCachedDataCtx()
+export function useQueryCached(url: string) {
+  const [data, setCachedData] = useCachedData()
 
   const fetchData = () => {
     setCachedData(url)

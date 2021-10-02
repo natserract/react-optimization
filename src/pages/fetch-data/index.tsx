@@ -1,10 +1,10 @@
 import React from "react"
-import { useCachedFetch } from "./useCachedFetch"
+import { useQueryCached } from "./useQueryCached"
 import { AllContextProvider } from "./Store"
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom"
 
 const Child = () => {
-  const { data } = useCachedFetch('https://jsonplaceholder.typicode.com/users/')
+  const { data } = useQueryCached('https://jsonplaceholder.typicode.com/users/')
 
   return (
     <React.Fragment>

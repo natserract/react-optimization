@@ -2,14 +2,17 @@ import { createContext, useState, createElement, useContext, useRef, useMemo, us
 import { get } from './utils'
 
 type Context<T> = T | (T | ((a: T) => void))[]
+type Dispatch = (...args: any) => void
 
 type CachedData = {
   [u: string]: any
 }
 
-const CachedDataCtx = createContext<Context<CachedData> | undefined>(undefined)
+const CachedDataCtx = createContext<Context<CachedData>>({})
 
-export const useCachedDataCtx = () => useContext(CachedDataCtx) as [any[], Function]
+export function useCachedData<T>() {
+  return useContext(CachedDataCtx) as [T[], Dispatch]
+}
 
 export const CacheDataProvider: React.FC = ({ children }) => {
   const cache = useRef<CachedData>({})
@@ -32,12 +35,12 @@ export const CacheDataProvider: React.FC = ({ children }) => {
     }
   }, [])
 
-  const value = [data, setCachedData]
-  return createElement(CachedDataCtx.Provider, { value }, children)
-
-  // prevents unnecessary renders
-  // const value = useMemo(() => [data, setCachedData], [data, setCachedData])
+  // const value = [data, setCachedData]
   // return createElement(CachedDataCtx.Provider, { value }, children)
+
+  // Prevents unnecessary renders
+  const value = useMemo(() => [data, setCachedData], [data, setCachedData])
+  return createElement(CachedDataCtx.Provider, { value }, children)
 }
 
 export const AllContextProvider: React.FC = ({ children }) => createElement(

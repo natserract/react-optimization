@@ -1,45 +1,39 @@
 import React, { memo, useState } from "react"
-import { useCachedFetch } from "./useCachedFetch"
+import { useQueryCached } from "./useQueryCached"
 import { BrowserRouter, Link, Route, Switch } from 'react-router-dom'
-import { AllContextProvider, useCachedDataCtx } from "./Store"
+import { AllContextProvider } from "./Store"
 
-type Data = {
-  id: string;
-  name: string;
-  username: string;
-  email: string;
-  phone: string;
-  website: string;
+function ExpensiveComponent() {
+  let now = performance.now();
+  while (performance.now() - now < 200) {
+    // Artificial delay -- do nothing for 200ms
+  }
+
+  return <p>I am a very slow component</p>
 }
 
 const ChildWithoutMemo = () => {
-  const [, setCachedData] = useCachedDataCtx()
-  const { data } = useCachedFetch('https://jsonplaceholder.typicode.com/users/')
-
   console.log("child of ChildWithoutMemo");
 
   return (
     <React.Fragment>
-      {JSON.stringify(data)}
-      {/* <button onClick={() => setCachedData('https://jsonplaceholder.typicode.com/posts/')}>Refetch</button> */}
+      ChildWithoutMemo
     </React.Fragment>
   )
 }
 
 const ChildWithMemo = memo(() => {
-  const [data] = useCachedDataCtx()
-
   console.log("child of ChildWithMemo");
 
   return (
     <React.Fragment>
-      {JSON.stringify(data)}
-      {/* <button onClick={() => setCachedData('https://jsonplaceholder.typicode.com/posts')}>Refetch 2</button> */}
+      ChildWithMemo
+      <ExpensiveComponent />
     </React.Fragment>
   )
 })
 
-const Root = () => {
+const Parent = () => {
   const [, forceRender] = useState<any>();
 
   return (
@@ -51,4 +45,4 @@ const Root = () => {
   )
 }
 
-export default Root
+export default Parent
